@@ -1,0 +1,563 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Швидкий тест миші</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .nav-tab {
+            padding: 8px 16px;
+            background: #16213e;
+            border: 1px solid #0f3460;
+            border-radius: 8px;
+            color: #a0a0a0;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .nav-tab:hover, .nav-tab.active {
+            background: #0f3460;
+            color: #fff;
+            border-color: #4a9eff;
+        }
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #16213e, #0f3460);
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        .header p {
+            color: #a0a0a0;
+            font-size: 16px;
+        }
+        /* Warning */
+        .warning {
+            background: #2d2000;
+            border: 1px solid #f0a000;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #ffd060;
+        }
+        /* Test Section */
+        .test-section {
+            background: #16213e;
+            border: 1px solid #0f3460;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .test-section h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        .test-section .description {
+            color: #a0a0a0;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+        .criteria {
+            background: #1a1a2e;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+        .criteria .pass {
+            color: #4caf50;
+            margin-bottom: 4px;
+        }
+        .criteria .fail {
+            color: #f44336;
+        }
+        /* Progress bar */
+        .progress-bar {
+            height: 6px;
+            background: #1a1a2e;
+            border-radius: 3px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        .progress-bar .fill {
+            height: 100%;
+            background: #4a9eff;
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        /* Click target */
+        .click-target {
+            background: #1a1a2e;
+            border: 2px dashed #0f3460;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            margin-bottom: 16px;
+        }
+        .click-target:hover {
+            border-color: #4a9eff;
+            background: #1e2a4a;
+        }
+        .click-target .count {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4a9eff;
+        }
+        .click-target .label {
+            color: #a0a0a0;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+        /* Scroll target */
+        .scroll-target {
+            background: #1a1a2e;
+            border: 2px dashed #0f3460;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .scroll-target .wheel-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+        .scroll-counts {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 14px;
+            color: #a0a0a0;
+        }
+        /* Drag target */
+        .drag-area {
+            background: #1a1a2e;
+            border: 2px dashed #0f3460;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 16px;
+            min-height: 150px;
+            position: relative;
+        }
+        .drag-box {
+            display: inline-block;
+            background: #4a9eff;
+            color: #fff;
+            padding: 16px 24px;
+            border-radius: 8px;
+            cursor: grab;
+            user-select: none;
+            font-weight: bold;
+        }
+        .drag-box:active {
+            cursor: grabbing;
+        }
+        .drag-count {
+            margin-top: 12px;
+            color: #a0a0a0;
+            font-size: 14px;
+        }
+        /* Reset button */
+        .reset-btn {
+            background: none;
+            border: 1px solid #0f3460;
+            color: #a0a0a0;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+        }
+        .reset-btn:hover {
+            border-color: #4a9eff;
+            color: #fff;
+        }
+        /* Status */
+        .status {
+            color: #a0a0a0;
+            font-size: 13px;
+            font-style: italic;
+        }
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #606060;
+            font-size: 12px;
+        }
+        /* Success state */
+        .success .click-target,
+        .success .scroll-target,
+        .success .drag-area {
+            border-color: #4caf50;
+        }
+        .success .fill {
+            background: #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <!-- Navigation -->
+    <div class="nav-tabs">
+        <div class="nav-tab active" onclick="scrollToTest(0)">1. Лівий клік</div>
+        <div class="nav-tab" onclick="scrollToTest(1)">2. Правий клік</div>
+        <div class="nav-tab" onclick="scrollToTest(2)">3. Прокрутка</div>
+        <div class="nav-tab" onclick="scrollToTest(3)">4. Середня</div>
+        <div class="nav-tab" onclick="scrollToTest(4)">5. Перетягування</div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>🖱️ Швидкий тест миші</h1>
+        <p>5 основних тестів для перевірки функціональності миші</p>
+    </div>
+
+    <!-- Warning -->
+    <div class="warning">
+        ⚠️ Покладіть мишу на рівну, чисту поверхню. Переконайтеся, що миша увімкнена (бездротова) або правильно підключена (дротова).
+    </div>
+
+    <!-- Test 1: Left Click -->
+    <div class="test-section" id="test-1">
+        <h2>1. Тест лівого кліку</h2>
+        <p class="description">Виконайте 5 кліків у цільовій області. Під час натискання перевірте, що кнопка не залипає, не має зламаних петель і реагує в додатку.</p>
+
+        <div class="criteria">
+            <div class="pass">✔ ПРОЙДЕНО: Усі 5 кліків зареєстровано, кнопка повертається чітко, без залипання чи хитання</div>
+            <div class="fail">✘ НЕ ПРОЙДЕНО: Пропущені кліки, кнопка залипає, відчувається розхитаною/зламаною, подвійне спрацювання при одному кліку</div>
+        </div>
+
+        <div class="progress-bar"><div class="fill" id="left-progress"></div></div>
+
+        <div class="click-target" id="left-target">
+            <div class="count" id="left-count">0 / 5</div>
+            <div class="label">Натисніть лівою кнопкою тут</div>
+        </div>
+
+        <button class="reset-btn" onclick="resetLeft()">↺ Скинути</button>
+
+        <div class="status" id="left-status">Готово — натисніть Старт, потім клікніть лівою кнопкою 5 разів</div>
+    </div>
+
+    <!-- Test 2: Right Click -->
+    <div class="test-section" id="test-2">
+        <h2>2. Тест правого кліку</h2>
+        <p class="description">Виконайте 5 правих кліків у цільовій області. Під час натискання перевірте, що кнопка не залипає, не має зламаних петель і реагує в додатку.</p>
+
+        <div class="criteria">
+            <div class="pass">✔ ПРОЙДЕНО: Усі 5 кліків зареєстровано, кнопка повертається чітко, без залипання чи хитання</div>
+            <div class="fail">✘ НЕ ПРОЙДЕНО: Пропущені кліки, кнопка залипає, відчувається розхитаною/зламаною, або проблеми з контекстним меню</div>
+        </div>
+
+        <div class="progress-bar"><div class="fill" id="right-progress"></div></div>
+
+        <div class="click-target" id="right-target" oncontextmenu="return false;">
+            <div class="count" id="right-count">0 / 5</div>
+            <div class="label">Натисніть правою кнопкою тут</div>
+        </div>
+
+        <button class="reset-btn" onclick="resetRight()">↺ Скинути</button>
+
+        <div class="status" id="right-status">Готово — натисніть правою кнопкою 5 разів у області вище</div>
+    </div>
+
+    <!-- Test 3: Scroll Wheel -->
+    <div class="test-section" id="test-3">
+        <h2>3. Тест колеса прокрутки</h2>
+        <p class="description">Перевірте, що колесо прокрутки відцентроване, не дряпає і вільно обертається з фіксацією (якщо застосовно). Прокрутіть вгору та вниз 3 рази і перевірте реакцію в додатку.</p>
+
+        <div class="criteria">
+            <div class="pass">✔ ПРОЙДЕНО: Колесо відцентроване, плавне обертання з рівномірною фіксацією, всі прокрутки зареєстровано</div>
+            <div class="fail">✘ НЕ ПРОЙДЕНО: Колесо дряпає, нерівномірна/відсутня фіксація, пропуски або не реєструється</div>
+        </div>
+
+        <div class="progress-bar"><div class="fill" id="scroll-progress"></div></div>
+
+        <div class="scroll-target" id="scroll-target">
+            <div class="wheel-icon">⟳</div>
+            <div class="scroll-counts">
+                <span>↑ Вгору: <span id="scroll-up-count">0</span> / 3</span>
+                <span>↓ Вниз: <span id="scroll-down-count">0</span> / 3</span>
+            </div>
+        </div>
+
+        <button class="reset-btn" onclick="resetScroll()">↺ Скинути</button>
+
+        <div class="status" id="scroll-status">Готово — прокрутіть вгору 3 рази та вниз 3 рази в області вище</div>
+    </div>
+
+    <!-- Test 4: Middle Click -->
+    <div class="test-section" id="test-4">
+        <h2>4. Середній клік (клік колесом)</h2>
+        <p class="description">Якщо є, виконайте 5 кліків, натискаючи колесо прокрутки вниз. Перевірте, що воно реагує в додатку.</p>
+
+        <div class="criteria">
+            <div class="pass">✔ ПРОЙДЕНО: Усі 5 кліків зареєстровано, кнопка колеса натискається з чітким тактильним відгуком</div>
+            <div class="fail">✘ НЕ ПРОЙДЕНО: Кліки не реєструються, кнопка м'яка/не реагує, або прокручує замість натискання</div>
+        </div>
+
+        <div class="progress-bar"><div class="fill" id="middle-progress"></div></div>
+
+        <div class="click-target" id="middle-target">
+            <div class="count" id="middle-count">0 / 5</div>
+            <div class="label">Натисніть середню кнопку (колесо) тут</div>
+        </div>
+
+        <button class="reset-btn" onclick="resetMiddle()">↺ Скинути</button>
+
+        <div class="status" id="middle-status">Готово — натисніть колесо прокрутки вниз 5 разів у області вище</div>
+    </div>
+
+    <!-- Test 5: Drag -->
+    <div class="test-section" id="test-5">
+        <h2>5. Тест перетягування</h2>
+        <p class="description">Виконайте тест перетягування, перетягнувши та перемістивши блок 2 рази. Натисніть, утримуйте, перемістіть, потім відпустіть.</p>
+
+        <div class="criteria">
+            <div class="pass">✔ ПРОЙДЕНО: Блок плавно слідує за курсором, відпускається чисто, 2 перетягування виконано</div>
+            <div class="fail">✘ НЕ ПРОЙДЕНО: Блок падає під час перетягування, заїкається або не слідує за курсором</div>
+        </div>
+
+        <div class="progress-bar"><div class="fill" id="drag-progress"></div></div>
+
+        <div class="drag-area" id="drag-area">
+            <div class="drag-box" id="drag-box">Перетягни мене</div>
+            <div class="drag-count">Перетягувань виконано: <span id="drag-count">0</span> / 2</div>
+        </div>
+
+        <button class="reset-btn" onclick="resetDrag()">↺ Скинути</button>
+
+        <div class="status" id="drag-status">Готово — натисніть і перетягніть блок, перемістіть його та відпустіть. Повторіть 2 рази.</div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Mouse Quick Test v1.0 | 5 тестів | Дані не збираються
+    </div>
+    </div>
+
+    <script>
+        // Left Click Test
+        let leftCount = 0;
+        const leftTarget = document.getElementById('left-target');
+        const leftCountEl = document.getElementById('left-count');
+        const leftProgress = document.getElementById('left-progress');
+        const leftStatus = document.getElementById('left-status');
+
+        leftTarget.addEventListener('click', function() {
+            if (leftCount < 5) {
+                leftCount++;
+                leftCountEl.textContent = leftCount + ' / 5';
+                leftProgress.style.width = (leftCount / 5 * 100) + '%';
+                if (leftCount === 5) {
+                    leftStatus.textContent = '✔ Завершено — усі 5 лівих кліків зареєстровано!';
+                    leftTarget.parentElement.classList.add('success');
+                }
+            }
+        });
+
+        function resetLeft() {
+            leftCount = 0;
+            leftCountEl.textContent = '0 / 5';
+            leftProgress.style.width = '0%';
+            leftStatus.textContent = 'Готово — натисніть Старт, потім клікніть лівою кнопкою 5 разів';
+            leftTarget.parentElement.classList.remove('success');
+        }
+
+        // Right Click Test
+        let rightCount = 0;
+        const rightTarget = document.getElementById('right-target');
+        const rightCountEl = document.getElementById('right-count');
+        const rightProgress = document.getElementById('right-progress');
+        const rightStatus = document.getElementById('right-status');
+
+        rightTarget.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            if (rightCount < 5) {
+                rightCount++;
+                rightCountEl.textContent = rightCount + ' / 5';
+                rightProgress.style.width = (rightCount / 5 * 100) + '%';
+                if (rightCount === 5) {
+                    rightStatus.textContent = '✔ Завершено — усі 5 правих кліків зареєстровано!';
+                    rightTarget.parentElement.classList.add('success');
+                }
+            }
+        });
+
+        function resetRight() {
+            rightCount = 0;
+            rightCountEl.textContent = '0 / 5';
+            rightProgress.style.width = '0%';
+            rightStatus.textContent = 'Готово — натисніть правою кнопкою 5 разів у області вище';
+            rightTarget.parentElement.classList.remove('success');
+        }
+
+        // Scroll Test
+        let scrollUp = 0, scrollDown = 0;
+        const scrollTarget = document.getElementById('scroll-target');
+        const scrollUpCount = document.getElementById('scroll-up-count');
+        const scrollDownCount = document.getElementById('scroll-down-count');
+        const scrollProgress = document.getElementById('scroll-progress');
+        const scrollStatus = document.getElementById('scroll-status');
+
+        scrollTarget.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            if (e.deltaY < 0 && scrollUp < 3) {
+                scrollUp++;
+                scrollUpCount.textContent = scrollUp;
+            } else if (e.deltaY > 0 && scrollDown < 3) {
+                scrollDown++;
+                scrollDownCount.textContent = scrollDown;
+            }
+            scrollProgress.style.width = ((scrollUp + scrollDown) / 6 * 100) + '%';
+            if (scrollUp === 3 && scrollDown === 3) {
+                scrollStatus.textContent = '✔ Завершено — усі прокрутки зареєстровано!';
+                scrollTarget.parentElement.classList.add('success');
+            }
+        });
+
+        function resetScroll() {
+            scrollUp = 0; scrollDown = 0;
+            scrollUpCount.textContent = '0';
+            scrollDownCount.textContent = '0';
+            scrollProgress.style.width = '0%';
+            scrollStatus.textContent = 'Готово — прокрутіть вгору 3 рази та вниз 3 рази в області вище';
+            scrollTarget.parentElement.classList.remove('success');
+        }
+
+        // Middle Click Test
+        let middleCount = 0;
+        const middleTarget = document.getElementById('middle-target');
+        const middleCountEl = document.getElementById('middle-count');
+        const middleProgress = document.getElementById('middle-progress');
+        const middleStatus = document.getElementById('middle-status');
+
+        middleTarget.addEventListener('mousedown', function(e) {
+            if (e.button === 1) {
+                e.preventDefault();
+                if (middleCount < 5) {
+                    middleCount++;
+                    middleCountEl.textContent = middleCount + ' / 5';
+                    middleProgress.style.width = (middleCount / 5 * 100) + '%';
+                    if (middleCount === 5) {
+                        middleStatus.textContent = '✔ Завершено — усі 5 середніх кліків зареєстровано!';
+                        middleTarget.parentElement.classList.add('success');
+                    }
+                }
+            }
+        });
+
+        function resetMiddle() {
+            middleCount = 0;
+            middleCountEl.textContent = '0 / 5';
+            middleProgress.style.width = '0%';
+            middleStatus.textContent = 'Готово — натисніть колесо прокрутки вниз 5 разів у області вище';
+            middleTarget.parentElement.classList.remove('success');
+        }
+
+        // Drag Test
+        let dragCount = 0;
+        let isDragging = false;
+        let hasMoved = false;
+        const dragBox = document.getElementById('drag-box');
+        const dragArea = document.getElementById('drag-area');
+        const dragCountEl = document.getElementById('drag-count');
+        const dragProgress = document.getElementById('drag-progress');
+        const dragStatus = document.getElementById('drag-status');
+        let offsetX, offsetY;
+
+        dragBox.addEventListener('mousedown', function(e) {
+            if (dragCount >= 2) return;
+            isDragging = true;
+            hasMoved = false;
+            offsetX = e.offsetX;
+            offsetY = e.offsetY;
+            dragBox.style.position = 'relative';
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (isDragging) {
+                hasMoved = true;
+                const rect = dragArea.getBoundingClientRect();
+                dragBox.style.left = (e.clientX - rect.left - offsetX) + 'px';
+                dragBox.style.top = (e.clientY - rect.top - offsetY) + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', function() {
+            if (isDragging && hasMoved) {
+                dragCount++;
+                dragCountEl.textContent = dragCount;
+                dragProgress.style.width = (dragCount / 2 * 100) + '%';
+                if (dragCount === 2) {
+                    dragStatus.textContent = '✔ Завершено — 2 перетягування виконано!';
+                    dragArea.parentElement.classList.add('success');
+                }
+            }
+            isDragging = false;
+            hasMoved = false;
+            dragBox.style.left = '0px';
+            dragBox.style.top = '0px';
+        });
+
+        function resetDrag() {
+            dragCount = 0;
+            dragCountEl.textContent = '0';
+            dragProgress.style.width = '0%';
+            dragStatus.textContent = 'Готово — натисніть і перетягніть блок, перемістіть його та відпустіть. Повторіть 2 рази.';
+            dragArea.parentElement.classList.remove('success');
+            dragBox.style.left = '0px';
+            dragBox.style.top = '0px';
+        }
+
+        // Navigation
+        function scrollToTest(index) {
+            const tests = document.querySelectorAll('.test-section');
+            if (tests[index]) {
+                tests[index].scrollIntoView({ behavior: 'smooth' });
+            }
+            document.querySelectorAll('.nav-tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === index);
+            });
+        }
+    </script>
+</body>
+</html>
+
